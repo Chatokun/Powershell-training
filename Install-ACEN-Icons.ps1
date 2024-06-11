@@ -22,7 +22,8 @@ Copy-Item -Path "$ScriptPath\$Icon2" -Destination "C:\Programdata\Acen Icons\$Ic
 
 if (Test-path -Path "C:\Program Files\Google\Chrome\Application"){$Howto = "How To.lnk"}
 elseif (Test-path -Path "C:\Program Files (x86)\Google\Chrome\Application"){$Howto = "How Tox86.lnk"}
-else {Write-Output "Chrome not installed"} 
+else {Write-Output "Chrome not installed"
+exit} 
 
 $ScriptPath = [System.IO.Path]::GetDirectoryName($MyInvocation.MyCommand.Definition)
 
@@ -33,7 +34,8 @@ Copy-Item -Path "$ScriptPath\$Howto" -Destination "$Env:Public\Desktop\How To.ln
 
 if (Test-path -Path "C:\Program Files\Google\Chrome\Application"){$Policy = "ACEN-Policy & Procedure.lnk"}
 elseif (Test-path -Path "C:\Program Files (x86)\Google\Chrome\Application"){$Policy = "ACEN-Policy & Procedurex86.lnk"}
-else {Write-Output "Chrome not installed"} 
+else {Write-Output "Chrome not installed"
+exit} 
 
 $ScriptPath = [System.IO.Path]::GetDirectoryName($MyInvocation.MyCommand.Definition)
 
