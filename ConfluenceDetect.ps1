@@ -8,4 +8,4 @@ $Path3test = Test-Path -Path "$Env:Public\Desktop\How To.lnk"
 
 $Path4test = Test-Path -Path "$Env:Public\Desktop\ACEN-Policy & Procedure.lnk"
 
-if ($path1test -eq "True" -and $Path2Test -and $Path3test -and $Path4test -eq "True"){Write-Output "0"}
+if ($path1test -and $Path2Test -and $Path3test -and $Path4test -eq "True"){Write-Output "0"}
