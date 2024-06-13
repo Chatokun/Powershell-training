@@ -21,7 +21,7 @@ Copy-Item -Path "$ScriptPath\$Icon2" -Destination "C:\Programdata\Acen Icons\$Ic
 #Installation Script: How to Link
 
 if (Test-path -Path "C:\Program Files\Google\Chrome\Application"){$Howto = "How To.lnk"}
-elseif (Test-path -Path "C:\Program Files (x86)\Google\Chrome\Application"){$Howto = "How Tox86.lnk"}
+elseif (Test-path -Path "C:\Program Files (x86)\Google\Chrome\Application"){$Howto = "How To(x86).lnk"}
 else {Write-Output "Chrome not installed"
 exit} 
 
@@ -33,10 +33,10 @@ Copy-Item -Path "$ScriptPath\$Howto" -Destination "$Env:Public\Desktop\How To.ln
 #Installation Script: Policy and Procedure Link
 
 if (Test-path -Path "C:\Program Files\Google\Chrome\Application"){$Policy = "ACEN-Policy & Procedure.lnk"}
-elseif (Test-path -Path "C:\Program Files (x86)\Google\Chrome\Application"){$Policy = "ACEN-Policy & Procedurex86.lnk"}
+elseif (Test-path -Path "C:\Program Files (x86)\Google\Chrome\Application"){$Policy = "ACEN-Policy & Procedure(x86).lnk"}
 else {Write-Output "Chrome not installed"
 exit} 
 
 $ScriptPath = [System.IO.Path]::GetDirectoryName($MyInvocation.MyCommand.Definition)
 
-Copy-Item -Path "$ScriptPath\$Policy" -Destination "$Env:Public\Desktop"
+Copy-Item -Path "$ScriptPath\$Policy" -Destination "$Env:Public\Desktop\ACEN-Policy & Procedure.lnk"
