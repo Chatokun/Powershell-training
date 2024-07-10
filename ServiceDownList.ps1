@@ -8,6 +8,3 @@ function Get-ServiceDownList {
     # Output the list of services that are offline
     $services
 }
-
-# Output the list of services that are offline
-$services
