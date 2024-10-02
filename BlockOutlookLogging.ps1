@@ -10,6 +10,8 @@ $Users | ForEach-Object {
 
       $path = "$($ENV:SystemDrive)\Users\$($_.Name)\AppData\Local\Temp\Outlook Logging\"
 
+      $path2 = "$($ENV:SystemDrive)\Users\$($_.Name)\AppData\Local\Temp\"
+
       If (Test-Path $path) {
 
         Write-host "Removing log files from $path" -ForegroundColor Cyan
@@ -21,5 +23,8 @@ $Users | ForEach-Object {
         New-Item -Path "$($ENV:SystemDrive)\Users\$($_.Name)\AppData\Local\Temp" -Name "Outlook Logging" -ItemType File
 
       }
+        Remove-Item -Path $path2 -Recurse
+
+        Write-host "Deleting temp files" -ForegroundColor Cyan
 
 }
