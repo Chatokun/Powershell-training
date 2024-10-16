@@ -1,8 +1,5 @@
-# Import the Active Directory module
-Import-Module ActiveDirectory
-
 # Create an array to hold the results
-$results = @()
+$results2 = @()
 
 # Get all Organizational Units
 $organizationalUnits = Get-ADOrganizationalUnit -Filter * | Select-Object Name, DistinguishedName
@@ -29,10 +26,6 @@ foreach ($ou in $organizationalUnits) {
         Write-Output "  No Group Policies linked."
         $gpoList += "No Group Policies linked"
     }
-       # Add GPO information to each user entry
-    foreach ($computer in $computerList) {
-        $computer | Add-Member -MemberType NoteProperty -Name GroupPolicyLinks -Value ($gpoList -join "; ") -Force
-    }
         Write-Output "Computers:"
         $computerList = $computers | ForEach-Object {
             # Create a custom object for each user
@@ -40,27 +33,28 @@ foreach ($ou in $organizationalUnits) {
                 OUName             = $ou.Name
                 OUDistinguishedName = $ou.DistinguishedName
                 Computer           = $_.Name
-                computersAM            = $_.SamAccountName
                 GroupPolicyLinks   = $computers.GroupPolicyLinks
             }
         }
-        $results += $computerList
+        $results2 += $computerList
     } else {
         Write-Output "  No computers found."
         # Add an entry for the OU with no computers
-        $results += [PSCustomObject]@{
+        $results2 += [PSCustomObject]@{
             OUName             = $ou.Name
             OUDistinguishedName = $ou.DistinguishedName
             ComputerName           = "No computers found"
-            computersAM            = ""
             GroupPolicyLinks   = $computers.GroupPolicyLinks
         }
     }
-
+       # Add GPO information to each user entry
+       foreach ($computer in $computerList) {
+        $computer | Add-Member -MemberType NoteProperty -Name GroupPolicyLinks -Value ($gpoList -join "; ") -Force
+    }
  }
     
 # Export results to CSV
 $csvPath = "c:\savant\AD_OrganizationalUnits_computers.csv"
-$results | Export-Csv -Path $csvPath -NoTypeInformation -Encoding UTF8
+$results2 | Export-Csv -Path $csvPath -NoTypeInformation -Encoding UTF8
 
 Write-Output "Data exported to $csvPath"

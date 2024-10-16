@@ -29,10 +29,6 @@ foreach ($ou in $organizationalUnits) {
         Write-Output "  No Group Policies linked."
         $gpoList += "No Group Policies linked"
     }
-       # Add GPO information to each user entry
-    foreach ($user in $userList) {
-        $user | Add-Member -MemberType NoteProperty -Name GroupPolicyLinks -Value ($gpoList -join "; ") -Force
-    }
         Write-Output "Users:"
         $userList = $users | ForEach-Object {
             # Create a custom object for each user
@@ -56,7 +52,10 @@ foreach ($ou in $organizationalUnits) {
             GroupPolicyLinks   = $users.GroupPolicyLinks
         }
     }
-
+       # Add GPO information to each user entry
+       foreach ($user in $userList) {
+        $user | Add-Member -MemberType NoteProperty -Name GroupPolicyLinks -Value ($gpoList -join "; ") -Force
+    }
  }
     
 # Export results to CSV
