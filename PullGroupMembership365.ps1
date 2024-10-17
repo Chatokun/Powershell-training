@@ -17,6 +17,8 @@ foreach ($group in $groups) {
         GroupName    = $group.DisplayName
         GroupObjectId = $group.ObjectId
         GroupType     = $group.GroupType
+        LastDirSync   = $group.LastDirSyncTime
+        GroupEmailAddress    = $group.EmailAddress
         Members      = if ($members) { $members.DisplayName -join '; ' } else { 'No Members' }
     }
     
