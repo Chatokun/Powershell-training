@@ -8,7 +8,7 @@ $UninstallDIR = Get-ChildItem $maindir -Directory
 foreach ($dir in $UninstallDIR) {
     $UninstallExe = Get-ChildItem $($dir.FullName)
     $uninstall = "$($dir.FullName)\$($UninstallExe.name) /x $($dir.Name) AI_UNINSTALLER_CTP=1"
-    if (Test-Path $uninstall) {
+    if (Test-Path $UninstallExe.FullName) {
         Start-Process $uninstall -Wait
     }
 }  
