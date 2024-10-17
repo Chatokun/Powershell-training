@@ -6,7 +6,8 @@ $UninstallDIR = Get-ChildItem $maindir -Directory
 
 # Run uninstaller from each directory
 foreach ($dir in $UninstallDIR) {
-    $uninstall = "$($dir.FullName)\DiRoots.One-1.9.1.exe /x $($dir.FullName) AI_UNINSTALLER_CTP=1"
+    $UninstallExe = Get-ChildItem $($dir.FullName)
+    $uninstall = "$($dir.FullName)\$($UninstallExe.name) /x $($dir.Name) AI_UNINSTALLER_CTP=1"
     if (Test-Path $uninstall) {
         Start-Process $uninstall -Wait
     }
