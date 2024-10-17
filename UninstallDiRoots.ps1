@@ -1,14 +1,5 @@
-#Establish the main directory
-$maindir = "C:\programdata\Caphyon\Advanced Installer"
+#Find the installed version of DiRoots.One
+$ID = get-wmiobject Win32_Product | where-object {$_.name -eq "DiRoots.One"}
 
-#Get all directories in order to match whichever version of the software is installed
-$UninstallDIR = Get-ChildItem $maindir -Directory 
-
-# Run uninstaller from each directory
-foreach ($dir in $UninstallDIR) {
-    $UninstallExe = Get-ChildItem $($dir.FullName)
-    $uninstall = "$($dir.FullName)\$($UninstallExe.name)" 
-    if (Test-Path $UninstallExe.FullName) {
-        Start-Process $uninstall /x $($dir.Name) AI_UNINSTALLER_CTP=1 -Wait
-    }
-}  
+#Uninstall the product
+C:\windows\system32\msiexec.exe /x $id.identifyingnumber /q  /l c:\savant\DiRootUninstall.log
