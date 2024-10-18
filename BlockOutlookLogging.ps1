@@ -29,7 +29,7 @@ $Users | ForEach-Object {
 
 }
 #Delete all logs in the C:\programdata\teradici\PcoipClient\logs folder older than 7 days 
-$Path = "C:\ProgramData\Teradici\PcoipClient\logs"
+$Path = "C:\ProgramData\Teradici\PcoipAgent\logs"
 $Days = "-7"
 $CurrentDate = Get-Date
 $DateToDelete = $CurrentDate.AddDays($Days)
