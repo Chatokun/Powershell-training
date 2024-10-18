@@ -28,3 +28,9 @@ $Users | ForEach-Object {
         Write-host "Deleting temp files" -ForegroundColor Cyan
 
 }
+#Delete all logs in the C:\programdata\teradici\PcoipClient\logs folder older than 7 days 
+$Path = "C:\ProgramData\Teradici\PcoipClient\logs"
+$Days = "-7"
+$CurrentDate = Get-Date
+$DateToDelete = $CurrentDate.AddDays($Days)
+Get-ChildItem -Path $Path -Recurse | Where-Object { $_.LastWriteTime -lt $DateToDelete } | Remove-Item -Force
