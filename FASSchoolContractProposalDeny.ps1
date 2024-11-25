@@ -40,13 +40,13 @@ foreach ($folder in $folders) {
                 Set-Acl $item.FullName $acl
 
                 # Log the success message
-                "Successfully denied access to '$group' for item '$($item.FullName)'" | Out-File -FilePath $logFilePath -Append
+                "$(get-Timestamp)Successfully denied access to '$group' for item '$($item.FullName)'" | Out-File -FilePath $logFilePath -Append
             } catch {
                 # Log the error message
-                "Failed to deny access to '$group' for item '$($item.FullName)': $_" | Out-File -FilePath $logFilePath -Append
+                "$(get-Timestamp)Failed to deny access to '$group' for item '$($item.FullName)': $_" | Out-File -FilePath $logFilePath -Append
             }
         }
     }
 }
 
-"ACL modification script completed" | Out-File -FilePath $logFilePath -Append
+"$(get-Timestamp)ACL modification script completed" | Out-File -FilePath $logFilePath -Append
