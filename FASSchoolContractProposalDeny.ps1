@@ -1,3 +1,5 @@
+#This script is run on the Schools Folder. It will search for all folders with "contracts" or "proposals" in their names and deny access to the groups 'Processing' and 'Project Consultants".
+
 # Define the groups to deny access
 $groupsToDeny = @("Processing", "Project Consultants")
 
