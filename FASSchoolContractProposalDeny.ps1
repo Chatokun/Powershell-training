@@ -21,6 +21,27 @@ Set-Location -Path "E:\Company\schools"
 $folders = Get-ChildItem -Recurse -Directory | Where-Object { $_.Name -match "contracts|proposals" }
 
 foreach ($folder in $folders) {
+    foreach ($group in $groupsToDeny) {
+        try {
+        #Create a deny access rule for the group
+        $denyRule = New-Object System.Security.AccessControl.FileSystemAccessRule($group, "FullControl", "Deny")
+
+        # Get the current ACL for the folder
+        $acl = Get-Acl $folder.FullName
+
+        # Add the deny rule to the ACL
+        $acl.SetAccessRule($denyRule)
+
+        # Apply the updated ACL to the folder
+        Set-Acl $folder.FullName $acl
+
+        # Log the success message
+        "$(get-Timestamp) Successfully denied access to '$group' for folder '$($folder.FullName)'" | Out-File -FilePath $logFilePath -Append
+        } catch {
+        # Log the error message
+        "$(get-Timestamp)Failed to deny access to '$group' for item '$($item.FullName)': $_" | Out-File -FilePath $logFilePath -Append
+        }
+    }
     # Get all subfolders and files within the folder
     $items = Get-ChildItem -Recurse -Path $folder.FullName
 
