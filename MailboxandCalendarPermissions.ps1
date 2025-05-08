@@ -35,6 +35,6 @@ foreach ($mailbox in $mailboxes) {
         }
     }
 }
-
+}
 # Export results to a CSV file
-$delegatedAccessList | Export-Csv -Path "C:\Users\chatoyer.huggins\OneDrive - savantcts.com\Clients\HPB\FullAccessDelegates.csv" -NoTypeInformation
+$delegatedAccessList | Export-Csv -Path "C:\Users\chatoyer.huggins\OneDrive - savantcts.com\Clients\Antonini\FullAccessDelegates.csv" -NoTypeInformation

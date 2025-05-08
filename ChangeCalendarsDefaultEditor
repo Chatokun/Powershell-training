@@ -20,16 +20,14 @@ ForEach ($mailbox in $mailboxesAllowed) {
  
     try {
         # Try adding the default Editor rights if not already set
+        Write-Output "Setting default calendar permissions for $calendarFolder to Editor."
          Add-MailboxFolderPermission -Identity $calendarFolder -User Default -AccessRights Editor -ErrorAction Stop
     }
     catch {
         # If the permission already exists or another error occurs, update the permission accordingly
+        Write-Output "Permission already exists or another error occurred for $calendarFolder. Updating to Editor."
         Set-MailboxFolderPermission -Identity $calendarFolder -User Default -AccessRights Editor
     }
 }
-
-
-
-
 
 
