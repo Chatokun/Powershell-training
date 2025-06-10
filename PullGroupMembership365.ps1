@@ -2,7 +2,7 @@
 Connect-MsolService
 
 # Get all groups
-$groups = Get-MsolGroup
+$groups = Get-MsolGroup -All
 
 # Prepare an array to hold results
 $result = @()
@@ -10,7 +10,7 @@ $result = @()
 # Loop through each group and get its members
 foreach ($group in $groups) {
     # Get group members
-    $members = Get-MsolGroupMember -GroupObjectId $group.ObjectId
+    $members = Get-MsolGroupMember -GroupObjectId $group.ObjectId -All
 
     # Create a structured entry for the group
     $entry = [PSCustomObject]@{
@@ -27,6 +27,6 @@ foreach ($group in $groups) {
 }
 
 # Export results to CSV
-$result | Export-Csv -Path "C:\Savant\LLH365GroupMemberships.csv" -NoTypeInformation -Encoding UTF8
+$result | Export-Csv -Path "C:\Savant\365GroupMemberships.csv" -NoTypeInformation -Encoding UTF8
 
-Write-Host "Export completed: LLH365GroupMemberships.csv"
+Write-Host "Export completed: 365GoupMemberships.csv"
