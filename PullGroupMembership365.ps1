@@ -1,32 +1,43 @@
-# Connect to MSOnline
-Connect-MsolService
-
-# Get all groups
-$groups = Get-MsolGroup -All
+# Connect to Exchange Online
+Connect-ExchangeOnline
 
 # Prepare an array to hold results
 $result = @()
 
-# Loop through each group and get its members
-foreach ($group in $groups) {
-    # Get group members
-    $members = Get-MsolGroupMember -GroupObjectId $group.ObjectId -All
-
-    # Create a structured entry for the group
+# Get all Distribution Groups
+$distGroups = Get-DistributionGroup -ResultSize Unlimited
+foreach ($group in $distGroups) {
+    $members = Get-DistributionGroupMember -Identity $group.Identity -ResultSize Unlimited
     $entry = [PSCustomObject]@{
-        GroupName    = $group.DisplayName
-        GroupObjectId = $group.ObjectId
-        GroupType     = $group.GroupType
-        LastDirSync   = $group.LastDirSyncTime
-        GroupEmailAddress    = $group.EmailAddress
-        Members      = if ($members) { $members.DisplayName -join '; ' } else { 'No Members' }
+        GroupType         = "DistributionGroup"
+        GroupName         = $group.DisplayName
+        GroupObjectId     = $group.Guid
+        GroupEmailAddress = $group.PrimarySmtpAddress
+        LastDirSync       = $null
+        Members           = if ($members) { $members.DisplayName -join '; ' } else { 'No Members' }
     }
-    
-    # Add the entry to the results array
+    $result += $entry
+}
+
+# Get all Microsoft 365 Groups (Unified Groups)
+$unifiedGroups = Get-UnifiedGroup -ResultSize Unlimited
+foreach ($group in $unifiedGroups) {
+    $members = Get-UnifiedGroupLinks -Identity $group.Identity -LinkType Members
+    $entry = [PSCustomObject]@{
+        GroupType         = "UnifiedGroup"
+        GroupName         = $group.DisplayName
+        GroupObjectId     = $group.ExternalDirectoryObjectId
+        GroupEmailAddress = $group.PrimarySmtpAddress
+        LastDirSync       = $null
+        Members           = if ($members) { $members.DisplayName -join '; ' } else { 'No Members' }
+    }
     $result += $entry
 }
 
 # Export results to CSV
 $result | Export-Csv -Path "C:\Savant\365GroupMemberships.csv" -NoTypeInformation -Encoding UTF8
 
-Write-Host "Export completed: 365GoupMemberships.csv"
+Write-Host "Export completed: 365GroupMemberships.csv"
+
+# Disconnect from Exchange Online
+Disconnect-ExchangeOnline -Confirm:$false
