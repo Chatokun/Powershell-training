@@ -1,9 +1,7 @@
 # Load the OTP module 
-Import-Module OTP 
-# Your base32 TOTP secret from Google 
-$totpSecret = "JBSWY3DPEHPK3PXP" 
+Import-Module OTPauth 
 # Generate the current TOTP code 
-$code = Get-TOTPToken -Secret $totpSecret 
+$code = get-otpauthcredential -issuer "Google" | get-otpauthcode 
 # Teams webhook URL 
 $webhookUrl = "https://outlook.office.com/webhook/..."  
 # Replace with your Teams webhook 
