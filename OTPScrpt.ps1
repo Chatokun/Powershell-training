@@ -1,7 +1,7 @@
 # Load the OTP module 
 Import-Module OTPauth 
 #Open Credential Store using Open-OtpAuthCredentialStore
-Open-OtpAuthCredentialStore -password <get this from ITGlue>
+Open-OtpAuthCredentialStore -password #get this from ITGlue
 # Generate the current TOTP code 
 $code = get-otpauthcredential -issuer "Google" | get-otpauthcode 
 # Teams webhook URL
