@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Check domain secure channel and attempt repair if broken (no credentials requested or stored).
+    Check domain secure channel and attempt repair if broken (uses credential from vault).
     Log output to C:\savant\Domaintest.log (create folder/file if needed).
 
 .NOTES
@@ -40,6 +40,19 @@ function Log {
     Add-Content -Path $logPath -Value $entry
 }
 
+# Retrieve credential from SecretManagement vault
+try {
+    $domainCred = Get-Secret -Vault 'ADCreds' -Name 'DomainJoinCred' -ErrorAction Stop
+    if (-not ($domainCred -is [System.Management.Automation.PSCredential])) {
+        Log "Retrieved secret 'DomainJoinCred' is not a PSCredential." 'ERROR'
+        exit 7
+    }
+    Log "Credential retrieved from vault 'ADCreds'." 'INFO'
+} catch {
+    Log "Unable to retrieve credential from vault 'ADCreds': $($_.Exception.Message)" 'ERROR'
+    exit 7
+}
+
 # Check domain membership
 try {
     $comp = Get-CimInstance -ClassName Win32_ComputerSystem -ErrorAction Stop
@@ -53,10 +66,10 @@ if (-not $comp.PartOfDomain) {
     exit 0
 }
 
-# Test secure channel
-Log "Testing computer secure channel..." 'INFO'
+# Test secure channel (using vault credential)
+Log "Testing computer secure channel using vault credential..." 'INFO'
 try {
-    $healthy = Test-ComputerSecureChannel -ErrorAction Stop
+    $healthy = Test-ComputerSecureChannel -Credential $domainCred -ErrorAction Stop
 } catch {
     Log "Test-ComputerSecureChannel failed: $($_.Exception.Message)" 'ERROR'
     exit 3
@@ -67,10 +80,10 @@ if ($healthy) {
     exit 0
 }
 
-# Attempt repair (no credentials provided or stored)
-Log "Secure channel appears broken. Attempting repair..." 'WARN'
+# Attempt repair (using vault credential)
+Log "Secure channel appears broken. Attempting repair using vault credential..." 'WARN'
 try {
-    $repaired = Test-ComputerSecureChannel -Repair -ErrorAction Stop
+    $repaired = Test-ComputerSecureChannel -Repair -Credential $domainCred -ErrorAction Stop
 } catch {
     Log "Repair attempt failed: $($_.Exception.Message)" 'ERROR'
     exit 4
