@@ -7,4 +7,4 @@ $CODETWO = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "Co
 $result = $CODETWO | ForEach-Object { msiexec /x $_.IdentifyingNumber /qn } 
 
 #Export the results to C:\Savant\Logs\UninstallCodeTwo.txt
-$result | Out-File -FilePath "C:\Savant\Logs\UninstallCodeTwo.txt" -Append
+$result | Out-File (  New-Item -Path "C:\Savant\Logs\UninstallCodeTwo.txt" -force) -Append
